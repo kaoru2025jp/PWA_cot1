@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sシミュレーター</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#4facfe,#00f2fe);
+    font-family:"Segoe UI",sans-serif;
+}
+
+.container{
+    background:white;
+    width:420px;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+h1{
+    text-align:center;
+    color:#333;
+    margin-bottom:25px;
+}
+
+.input-group{
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+    margin-bottom:5px;
+    font-weight:bold;
+    color:#444;
+}
+
+input[type="number"]{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#f2f4f8;
+    font-size:16px;
+}
+
+.result{
+    margin-top:25px;
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    color:white;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+}
+
+.result-value{
+    font-size:42px;
+    font-weight:bold;
+}
+
+.simulator{
+    margin-top:25px;
+}
+
+input[type="range"]{
+    width:100%;
+}
+
+.sim-value{
+    text-align:center;
+    margin-top:10px;
+    font-size:18px;
+    font-weight:bold;
+    color:#555;
+}
+
+.status{
+    margin-top:15px;
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📊 Sシミュレーター</h1>
+
+    <div class="input-group">
+        <label>B</label>
+        <input type="number" id="b" value="100">
+    </div>
+
+    <div class="input-group">
+        <label>O1</label>
+        <input type="number" id="o1" value="20">
+    </div>
+
+    <div class="input-group">
+        <label>O2</label>
+        <input type="number" id="o2" value="10">
+    </div>
+
+    <div class="result">
+        <div>S = B - O1 - O2</div>
+        <div id="result" class="result-value">70</div>
+    </div>
+
+    <div class="simulator">
+        <label>🎮 Sシミュレーション</label>
+
+        <input
+            type="range"
+            id="simulation"
+            min="-100"
+            max="100"
+            value="0">
+
+        <div class="sim-value">
+            補正値: <span id="simValue">0</span>
+        </div>
+
+        <div class="status" id="status">
+            通常
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+const bInput = document.getElementById("b");
+const o1Input = document.getElementById("o1");
+const o2Input = document.getElementById("o2");
+const simulation = document.getElementById("simulation");
+
+function calculate(){
+
+    const B = Number(bInput.value) || 0;
+    const O1 = Number(o1Input.value) || 0;
+    const O2 = Number(o2Input.value) || 0;
+    const adjust = Number(simulation.value);
+
+    const S = B - O1 - O2 + adjust;
+
+    document.getElementById("result").textContent = S;
+    document.getElementById("simValue").textContent = adjust;
+
+    const status = document.getElementById("status");
+
+    if(S > 100){
+        status.textContent = "🚀 非常に良好";
+        status.style.color = "lime";
+    }
+    else if(S > 50){
+        status.textContent = "✅ 良好";
+        status.style.color = "#00ff88";
+    }
+    else if(S > 0){
+        status.textContent = "⚠ 注意";
+        status.style.color = "yellow";
+    }
+    else{
+        status.textContent = "🔴 マイナス";
+        status.style.color = "#ff6666";
+    }
+}
+
+bInput.addEventListener("input",calculate);
+o1Input.addEventListener("input",calculate);
+o2Input.addEventListener("input",calculate);
+simulation.addEventListener("input",calculate);
+
+calculate();
+
+</script>
+
+</body>
+</html>
